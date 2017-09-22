@@ -3,11 +3,10 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Models\Post;
 
 class CreatePostsTable extends Migration
 {
-    define('APPROVED', true);
-    define('NOT_APPROVED', false);
     /**
      * Run the migrations.
      *
@@ -23,9 +22,8 @@ class CreatePostsTable extends Migration
             $table->unsignedInteger('category_id');
             $table->string('thumb_image');
             $table->text('sapo');
-            $table->boolean('is_approved')->default(NOT_APPROVED);
+            $table->boolean('is_approved')->default(Post::NOT_APPROVED);
             $table->timestamps();
-
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
