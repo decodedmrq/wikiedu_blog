@@ -15,7 +15,11 @@ Route::get('home', function() {
 });
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function() {
-	Route::resource('/', 'PostController');
+	Route::resource('/post', 'PostController');
+	Route::resource('/user', 'UserController');
+	Route::get('overview', function() {
+		return view('admin.overview');
+	})->name('overview');
 });
 
 
