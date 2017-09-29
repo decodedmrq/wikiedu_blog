@@ -12,23 +12,36 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends BaseController
 {
+	protected $model = Post::class;
+
+	public function index()
+	{
+		$posts = $this->model::all();
+
+    	return view('admin.post.index', compact('posts'));
+	}
 	public function create()
 	{
 		$categories = Category::all();
-		
+
 		return view('admin.post.create', compact('categories'));
 	}
+	public function destroy(Post $post)
+    {
+    	$post->delete();
+    	return redirect()->back();
+    }
 	public function store(Request $request)
 	{
 		$post = $this->validate(request(), $this->rules());
-		
-		$name = $request->thumb_image->store('images/');
+
+		$name = $request->thumb_image->store('images');
 		$thumb_image = $request['thumb_image'];
-
-		$post['user_id'] = Auth::user()->id;
+		$user = auth_user();
 		$post['thumb_image'] = $name;
+		$user->posts()->create($post);
 
-		Post::create($post);
+		// $createdPost = $this->instance()->create($post);
 		return redirect()->route('overview');
 	}
 
